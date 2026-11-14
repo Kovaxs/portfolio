@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "targets": {
+    "gruvbox-cv-webpage": {
+      "targetKind": "new-ui",
+      "projectId": "badf6566-c8e6-4d07-9229-6467b6245c24",
+      "activeDraftId": "b8ac6488-1804-40d5-93fe-a2823c9f6a97",
+      "designSystemPath": null,
+      "referenceIds": [],
+      "brandAssets": {},
+      "contextFiles": [],
+      "fingerprints": {},
+      "components": [],
+      "drafts": {
+        "b8ac6488-1804-40d5-93fe-a2823c9f6a97": {
+          "title": "Gruvbox CLI Portfolio with Pixel Parallax",
+          "visualDirection": "Gruvbox dark terminal aesthetic with generative pixel parallax background; neofetch hero with spinning ASCII toroid; tmux status bar tabs on top; CV PDF download CTA",
+          "parentDraftId": null,
+          "currentVersion": 5
+        }
+      },
+      "updatedAt": "2026-10-07T19:28:00.000Z"
+    }
+  }
+}
