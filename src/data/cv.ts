@@ -2,7 +2,7 @@
 export const profile = {
   name: "Oleksandr Kovalyk Borodyak",
   role: "Telematics Engineer",
-  email: "oleksandr.kovalyk@edu.upct.es",
+  email: "oleksandr.kovalyk8@gmail.com",
   linkedin: "https://www.linkedin.com/in/oleksnadr-kovalyk-4a5861213",
   orcid: "https://orcid.org/0000-0003-4815-8248",
   summary:
