@@ -1,0 +1,268 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import TerminalCommand from '../components/TerminalCommand.astro';
+import { profile, skills, education, experience, projects, publications, conferences } from '../data/cv';
+
+const cvUrl = `${import.meta.env.BASE_URL}oleksandr_kovalyk_cv.pdf`;
+---
+
+<BaseLayout>
+  <script is:inline>
+    // Hide only while the enhancement loads; restore static content if it fails.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches && !location.hash) {
+      document.documentElement.classList.add('terminal-booting');
+      window.setTimeout(() => document.documentElement.classList.remove('terminal-booting'), 2500);
+    }
+  </script>
+  <main class="min-h-screen p-4 md:p-12 lg:p-20 relative flex flex-col items-center main-container selection-highlight">
+    <canvas id="pixel-canvas" aria-hidden="true"></canvas>
+
+    <!-- CRT Overlays -->
+    <div class="crt-overlay" aria-hidden="true"></div>
+    <div class="scanline" aria-hidden="true"></div>
+
+    <!-- Terminal Window -->
+    <div class="w-full max-w-5xl terminal-shadow rounded-lg overflow-hidden border border-[#3c3836] bg-[#282828]/95 backdrop-blur-sm flex flex-col">
+      <!-- tmux Status Bar (status-position top) -->
+      <div class="bg-[#1d2021] border-b border-[#3c3836] flex items-center justify-between text-[10px] md:text-xs select-none">
+        <div class="flex items-center min-w-0">
+          <span class="bg-[#b8bb26] text-[#282828] font-bold px-2 py-1 shrink-0">[visitor]</span>
+          <div class="flex items-center" aria-label="tmux windows">
+            <span class="tmux-tab tmux-tab-active" aria-current="page">0:portfolio*</span>
+          </div>
+        </div>
+        <div class="hidden md:flex items-center shrink-0 text-[#a89984]">
+          <span class="px-2">kovalyk</span>
+          <span class="px-2" id="tmux-clock">--:--</span>
+          <span class="pl-2 pr-3" id="tmux-date">--</span>
+        </div>
+      </div>
+
+      <!-- Terminal Content -->
+      <div id="terminal-content" class="p-6 md:p-10 space-y-8 text-sm md:text-base">
+        <!-- Header Section: neofetch -->
+        <header id="section-neofetch" data-terminal-section class="space-y-4 scroll-mt-6">
+          <TerminalCommand command="neofetch" />
+          <div class="pl-4 border-l-2 border-[#504945] py-2">
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 lg:gap-14">
+              <!-- Static fallback remains visible without JavaScript. -->
+              <pre id="toroid" class="shrink-0 select-none text-[9px] md:text-[10px] lg:text-[11px] leading-[1.15]" role="img" aria-label="ASCII toroid logo">{'\n\n\n\n            .,-~:;=!*#$@\n         .,-~:;=!*#$@@@@@@\n       .,-~:;=!*#$$@@@@@@@#$\n      ,-~:;=!*#$@@     @@#$*!\n      ~:;=!*#$@@       @#$*!;\n      :;=!*#$@@        #$*!;:\n      ;=!*#$@@        #$*!;:~\n       =!*#$@@      #$*!;:~-\n        !*#$@@@@@@#$*!;:~-,\n          *#$$$$#*!;:~-,.\n             !*;:~-,.\n\n\n\n '}</pre>
+
+              <!-- Neofetch info fields -->
+              <div class="text-xs md:text-sm lg:text-base space-y-1.5 min-w-0 w-full md:w-auto md:flex-1 break-words">
+                <h1 class="text-base md:text-lg font-normal m-0">
+                  <span class="text-[#fabd2f] font-bold">oleksandr</span><span class="text-[#928374]">@</span><span class="text-[#83a598] font-bold">terminal</span>
+                </h1>
+                <div class="text-[#504945]">────────────────</div>
+                <div><span class="text-[#b8bb26] font-bold">Name</span>: <span class="text-[#ebdbb2]">{profile.name}</span></div>
+                <div><span class="text-[#b8bb26] font-bold">Role</span>: <span class="text-[#ebdbb2]">{profile.role}</span></div>
+                <div><span class="text-[#b8bb26] font-bold">Focus</span>: <span class="text-[#ebdbb2]">Machine learning, image processing &amp; data systems</span></div>
+                <div><span class="text-[#b8bb26] font-bold">OS</span>: <span class="text-[#ebdbb2]">Linux</span></div>
+                <div><span class="text-[#b8bb26] font-bold">Editor</span>: <span class="text-[#ebdbb2]">Neovim</span></div>
+                <div><span class="text-[#b8bb26] font-bold">Languages</span>: <span class="text-[#ebdbb2]">Python, SQL</span></div>
+                <div><span class="text-[#b8bb26] font-bold">Resume</span>: <a id="neofetch-cv-link" href={cvUrl} download class="text-[#8ec07c] underline decoration-dotted underline-offset-4 hover:text-[#ebdbb2] transition-colors">cv.pdf</a></div>
+                <!-- Gruvbox palette swatches -->
+                <div class="pt-3 leading-none" aria-hidden="true">
+                  <div><span style="color:#1d2021">███</span><span style="color:#cc241d">███</span><span style="color:#98971a">███</span><span style="color:#d79921">███</span><span style="color:#458588">███</span><span style="color:#b16286">███</span><span style="color:#689d6a">███</span><span style="color:#a89984">███</span></div>
+                  <div><span style="color:#928374">███</span><span style="color:#fb4934">███</span><span style="color:#b8bb26">███</span><span style="color:#fabd2f">███</span><span style="color:#83a598">███</span><span style="color:#d3869b">███</span><span style="color:#8ec07c">███</span><span style="color:#ebdbb2">███</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Navigation/Command Area -->
+        <section id="section-about" data-terminal-section class="space-y-6 scroll-mt-6">
+          <TerminalCommand command="ls -la /about" />
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Profile Card -->
+            <div class="border border-[#504945] p-5 hover:bg-[#32302f] transition-all group bg-[#282828]">
+              <div class="flex items-center space-x-3 mb-4">
+                <Icon name="user" class="text-2xl text-[#b8bb26]" />
+                <h3 class="font-bold text-[#ebdbb2]">PROFILE</h3>
+              </div>
+              <p class="text-xs text-[#a89984] leading-relaxed">
+                {profile.summary}
+              </p>
+            </div>
+
+            <!-- Tech Stack Card -->
+            <div class="border border-[#504945] p-5 hover:bg-[#32302f] transition-all bg-[#282828]">
+              <div class="flex items-center space-x-3 mb-4">
+                <Icon name="cpu" class="text-2xl text-[#fe8019]" />
+                <h3 class="font-bold text-[#ebdbb2]">CORE_STACK</h3>
+              </div>
+              <ul class="text-xs space-y-1 text-[#a89984]">
+                {skills.map((skill) => (
+                  <li><span class="text-[#fe8019]">&gt;</span> {skill.label}: {skill.value}</li>
+                ))}
+              </ul>
+            </div>
+
+            <!-- Hobbies Card -->
+            <div class="border border-[#504945] p-5 hover:bg-[#32302f] transition-all bg-[#282828]">
+              <div class="flex items-center space-x-3 mb-4">
+                <Icon name="code-2" class="text-2xl text-[#8ec07c]" />
+                <h3 class="font-bold text-[#ebdbb2]">INTERESTS</h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                {['Technology & Innovation', 'Machine Learning', 'Home Labs', 'Weightlifting'].map((interest) => (
+                  <span class="px-2 py-1 bg-[#3c3836] text-[10px] rounded text-[#8ec07c]">{interest}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="section-experience" data-terminal-section aria-label="Professional experience" class="space-y-6 scroll-mt-6">
+          <TerminalCommand command="cat experience.md" path="~/work" heading />
+          <div class="space-y-8 pl-4 border-l-2 border-[#504945]">
+            {experience.map((job) => (
+              <article class="relative">
+                <div class="absolute -left-[22px] top-1.5 w-3 h-3 bg-[#fabd2f] rounded-full"></div>
+                <h3 class="text-[#fabd2f] font-bold">{job.role}</h3>
+                <p class="text-sm text-[#928374]">@ {job.organization}</p>
+                <p class="text-xs text-[#928374] mt-1">{job.period}</p>
+                <p class="text-sm text-[#a89984] mt-2">{job.description}</p>
+                {job.funding && <p class="text-xs text-[#928374] mt-2">{job.funding}</p>}
+                {job.url && <a href={job.url} class="inline-block text-xs text-[#8ec07c] underline underline-offset-4 mt-2">Project details</a>}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="section-projects" data-terminal-section aria-label="Projects" class="space-y-6 scroll-mt-6">
+          <TerminalCommand command="./view_portfolio.sh" path="~/projects" heading />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {projects.map((project) => (
+              <article class="p-4 bg-[#32302f] border-l-4 border-[#83a598] space-y-2">
+                <p class="text-[10px] uppercase tracking-widest text-[#928374]">{project.category}</p>
+                <h3 class="text-[#83a598] font-bold">{project.title}</h3>
+                <p class="text-xs text-[#928374]">{project.organization}</p>
+                {project.period && <p class="text-xs text-[#928374]">{project.period}</p>}
+                <p class="text-xs text-[#a89984] leading-relaxed">{project.description}</p>
+                <p class="text-xs text-[#8ec07c]">{project.stack}</p>
+                {project.url && (
+                  <a href={project.url} class="inline-flex items-center gap-2 text-xs text-[#83a598] underline underline-offset-4">
+                    Project details <Icon name="external-link" />
+                  </a>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="section-education" data-terminal-section aria-label="Education" class="space-y-6 scroll-mt-6">
+          <TerminalCommand command="cat degrees.md" path="~/education" heading />
+          <div class="space-y-4 pl-4 border-l-2 border-[#504945]">
+            {education.map((item) => (
+              <article>
+                <h3 class="text-[#b8bb26] font-bold">{item.degree}</h3>
+                <p class="text-sm text-[#a89984]">{item.institution}</p>
+                <p class="text-xs text-[#928374]">{item.year}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- Publications Section -->
+        <section id="section-publications" data-terminal-section aria-label="Publications" class="space-y-6 scroll-mt-6">
+          <TerminalCommand command="cat publications.bib" path="~/research" heading />
+          <div class="space-y-6">
+            {publications.map((paper) => (
+              <article class="pl-4 border-l-2 border-[#d3869b] space-y-2">
+                <h3 class="text-[#d3869b] font-bold">
+                  <a href={`https://doi.org/${paper.doi}`} class="hover:underline underline-offset-4">{paper.title}</a>
+                </h3>
+                <p class="text-xs text-[#928374]">{paper.publisher} · {paper.date}</p>
+                <p class="text-xs text-[#a89984] leading-relaxed">{paper.authors}</p>
+                <a href={`https://doi.org/${paper.doi}`} class="inline-block text-xs text-[#8ec07c] underline underline-offset-4 break-all">DOI: {paper.doi}</a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- Conferences Section -->
+        <section id="section-conferences" data-terminal-section aria-label="Conferences" class="space-y-6 scroll-mt-6">
+          <TerminalCommand command="cat conferences.md" path="~/research" heading />
+          <div class="space-y-6">
+            {conferences.map((conference) => (
+              <article class="pl-4 border-l-2 border-[#fe8019] space-y-2">
+                <p class="text-[10px] uppercase tracking-widest text-[#928374]">{conference.category}</p>
+                <h3 class="text-[#fe8019] font-bold">{conference.title}</h3>
+                <p class="text-sm text-[#a89984]">{conference.event}</p>
+                <p class="text-xs text-[#928374]">{conference.location} · {conference.date}</p>
+                {conference.organizer && <p class="text-xs text-[#928374]">Organizer: {conference.organizer}</p>}
+                <p class="text-xs text-[#a89984] leading-relaxed">{conference.authors}</p>
+                {conference.doi && <a href={`https://doi.org/${conference.doi}`} class="inline-block text-xs text-[#8ec07c] underline underline-offset-4 break-all">{conference.publisher} · DOI: {conference.doi}</a>}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <!-- Contact Section -->
+        <footer id="section-contact" data-terminal-section class="pt-8 space-y-6 scroll-mt-6">
+          <TerminalCommand command="ssh oleksandr@remote" />
+
+          <div class="bg-[#32302f] p-6 rounded border border-[#504945] flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="space-y-2 min-w-0">
+              <p class="text-xs uppercase tracking-widest text-[#928374]">Connection Details</p>
+              <div class="flex items-center space-x-3">
+                <Icon name="mail" class="text-[#8ec07c]" />
+                <a href={`mailto:${profile.email}`} class="text-[#ebdbb2] text-sm break-all hover:underline">{profile.email}</a>
+              </div>
+              <div class="flex items-center space-x-3">
+                <Icon name="external-link" class="text-[#8ec07c]" />
+                <a href={profile.linkedin} class="text-[#ebdbb2] hover:underline">LinkedIn: Oleksandr Kovalyk</a>
+              </div>
+              <div class="flex items-center space-x-3">
+                <Icon name="file-text" class="text-[#8ec07c]" />
+                <a href={profile.orcid} class="text-[#ebdbb2] text-sm break-all hover:underline">ORCID: 0000-0003-4815-8248</a>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row md:flex-col gap-3 shrink-0">
+              <a id="cta-download-cv" href={cvUrl} download class="px-8 py-3 border-2 border-[#83a598] text-[#83a598] font-bold hover:bg-[#83a598] hover:text-[#282828] transition-colors inline-flex items-center justify-center gap-2">
+                <Icon name="download" />
+                <span>CV.PDF</span>
+              </a>
+              <a id="cta-hire-me" href={`mailto:${profile.email}`} class="px-8 py-3 bg-[#b8bb26] text-[#282828] font-bold hover:bg-[#ebdbb2] transition-colors text-center">
+                CONTACT_ME()
+              </a>
+            </div>
+          </div>
+
+          <!-- Blinking Prompt -->
+          <div class="flex items-center space-x-2 mt-12" aria-hidden="true">
+            <span class="command-prefix">visitor@terminal:</span>
+            <span class="dir-path">~</span>
+            <span class="flex items-center">$<span class="cursor ml-2"></span></span>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <div id="terminal-continue" class="terminal-continue w-full max-w-5xl" hidden>
+      <div class="flex flex-wrap items-center justify-between gap-4 text-xs text-[#a89984]">
+        <button type="button" id="terminal-next" aria-controls="terminal-content" class="terminal-control">Scroll to continue ↓</button>
+        <button type="button" id="terminal-show-all" aria-controls="terminal-content" class="terminal-control">Show all</button>
+      </div>
+    </div>
+
+    <!-- Decorative Sidebar Info (Desktop Only) -->
+    <div class="fixed right-8 top-1/2 -translate-y-1/2 hidden 2xl:block space-y-4" aria-hidden="true">
+      <div class="text-[10px] text-[#504945] uppercase tracking-[0.3em] vertical-text [writing-mode:vertical-rl]">System Status: Online</div>
+      <div class="h-32 w-[1px] bg-[#504945] mx-auto"></div>
+      <div class="text-[10px] text-[#504945] uppercase tracking-[0.3em] vertical-text [writing-mode:vertical-rl]">Version 2.4.0-stable</div>
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  import '../scripts/terminal-reveal.js';
+  import '../scripts/terminal.js';
+</script>
