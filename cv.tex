@@ -1,0 +1,398 @@
+\documentclass[10pt]{article}
+\usepackage[a4paper,bottom = 0.6in,left = 0.75in,right = 0.75in,top = 1cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{microtype}
+\usepackage{titlesec}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{palatino}
+\usepackage{tabularx}
+\fontfamily{SansSerif}
+\usepackage{fontawesome5}
+\usepackage[hidelinks]{hyperref}
+\usepackage{textcomp}
+
+\usepackage{verbatim}
+\usepackage{makecell}
+\usepackage{pbox}
+
+%for color
+\usepackage[usenames, dvipsnames]{color}
+\definecolor{myblue}{RGB}{10,0,254}
+
+% Adjusting the margins
+\enlargethispage{2\baselineskip} % you can adjust the number based on your content's fit in the page
+
+\newcommand{\xfilll}[2][1ex]{
+\dimen0=#2\advance\dimen0 by #1
+\leaders\hrule height \dimen0 depth -#1\hfill}
+\titleformat{\section}{\large\scshape\raggedright}{}{0em}{}
+\renewcommand\labelitemi{\raisebox{0.4ex}{\tiny$\bullet$}}
+\renewcommand{\labelitemii}{$\cdot$}
+\pagenumbering{gobble}
+
+
+\usepackage[T1]{fontenc}
+\usepackage
+%[ansinew]
+[utf8]
+{inputenc}
+
+\usepackage{color}
+\definecolor{mygrey}{gray}{0.99}
+\textheight=10in
+\raggedbottom
+
+\setlength{\tabcolsep}{0in}
+\newcommand{\isep}{-2 pt}
+\newcommand{\lsep}{-0.5cm}
+\newcommand{\psep}{-0.6cm}
+\renewcommand{\labelitemii}{$\circ$}
+
+\pagestyle{empty}
+%-----------------------------------------------------------
+%Custom commands
+\newcommand{\resitem}[1]{\item[{\color[RGB]{10,0,254}$\bullet$}] #1 \vspace{-2pt}}
+\newcommand{\resheading}[1]{{\small \colorbox{mygrey}{\begin{minipage}{0.99\textwidth}{\textbf{#1 \vphantom{p\^{E}}}}\end{minipage}}}}
+\newcommand{\ressubheading}[3]{
+\begin{tabular*}{8.62in}{l @{\extracolsep{\fill}} r}
+	\textsc{{\textbf{#1}}} & \textsc{\textit{[#2]}} \\
+\end{tabular*}\vspace{-8pt}}
+
+
+\begin{document}
+
+\begin{table}
+    \begin{center}
+    {\Huge \scshape Oleksandr Kovalyk Borodyak} \\ \vspace{5pt}
+    TELEMATICS ENGINEER \\ \vspace{5pt}
+	% \small \raisebox{-0.1\height}\faPhone\ +34 645043899 
+	\href{mailto:oleksandr.kovalyk@edu.upct.es}{\raisebox{-0.2\height}\faEnvelope\  \underline{oleksandr.kovalyk@edu.upct.es}} ~ 
+    \href{https://www.linkedin.com/in/oleksnadr-kovalyk-4a5861213}{\raisebox{-0.2\height}\faLinkedin\ \underline{Oleksandr Kovalyk}}  ~
+    % \href{https://github.com/Kovaxs}{\raisebox{-0.2\height}\faGithub\ \underline{Kovaxs}} ~
+    % \href{https://websiteurl.com}{\raisebox{-0.2\height}\faGlobe\ \underline{/websiteurl.com}}
+    \href{https://orcid.org/0000-0003-4815-8248}{\raisebox{-0.2\height}\faOrcid\ \underline{0000-0003-4815-8248}}
+    \vspace{-8pt}
+\end{center}
+\end{table}    
+
+
+\setlength{\tabcolsep}{11pt} % decrease the value if the content is overfitting
+\begin{table}
+\centering
+\begin{tabular}{lllll}
+\toprule
+\textbf{Title}   & \textbf{Institute}    & \textbf{Year} \\ 
+\toprule
+Master's Degree in Telematics Engineering & Technical University of Cartagena & 2021  \\
+Bachelor Degree in Telematics Engineering & Technical University of Cartagena & 2020  \\
+\bottomrule \\[-0.75cm]
+\end{tabular}
+\end{table}
+\vspace{-8pt}
+
+%%% SHORT SUMMARY %%%
+\section*{{ \LARGE \color{myblue} Summary}\xfilll[0pt]{0.5pt}}
+\vspace{-15pt}
+\vspace{2.5mm}
+% Describe your professional self in a few lines
+I am passionate about technology and innovation.
+I see myself as a responsible individual, capable of adapting and learning swiftly.
+I enjoy working in a team and contributing new ideas.
+I consider myself to be a person with initiative, always eager to learn and improve day by day.
+I love tinkering with technology and learning new things beyond my field of study. 
+I am a person who is always looking for new challenges and opportunities to grow professionally.
+In my free time, I usually do sport, my favorite sport is weightlifting.
+\vspace{-8pt}
+
+%%%% PROFESSIONAL EXPERIENCE %%%%
+\section*{{\LARGE \color{myblue}Professional Experience}\xfilll[0pt]{0.5pt}}
+\vspace{-15pt}
+\vspace{3.5mm}
+
+%\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+\textbf{\large Research Assistant}| \normalfont{Technical University of Cartagena \& EU Life Project} \hfill 
+%\\[-0.5cm]
+% \emph{Awarded Letter of Recommendation for excellent performance during the internship period } 
+%\\[-0.5cm]	
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Reducing the impact of underwater noise on the marine environment of the Port of Cartagena.\hfill {\href{https://webgate.ec.europa.eu/life/publicWebsite/project/LIFE20-ENV-ES-000387/reducing-the-impact-of-underwater-noise-on-the-marine-environment-of-the-port-of-cartagena}{\small \underline{Project Link} }} 
+	\end{itemize} 
+\textbf{\large Research Assistant}| \normalfont{Technical University of Cartagena \& MTorres} \hfill { \small February 2022 - May 2023}
+%\\[-0.5cm]
+ %\emph{Awarded Letter of Recommendation for excellent performance during the internship period } 
+
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Detection of carbon fiber wrapping failures using images from a profilometer.
+	\end{itemize} 
+\textbf{\large Research Assistant}| \normalfont{Technical University of Cartagena \& \\ \hspace*{3.54cm} | Hospital General Universitario Reina Sofía} \hfill { \small December 2019 - December 2020} 
+%\\[-0.5cm]
+% \emph{Awarded Letter of Recommendation for excellent performance during the internship period } 
+%\\[-0.5cm]	
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Automatic feature extraction of the optical nerve of both eyes by
+	image processing and statistical pattern recognition for its integration in a telemedicine CAD (Computer-Aided Diagnosis) application. 
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent This work has been partially funded by Spanish National projects AES2017-PI17/00771 and
+	AES2017-PI17/00821 (Instituto de Salud Carlos III) and regional project 20901/PI/18 (Fundación Séneca). 
+	\end{itemize} 
+
+
+\vspace{-15pt}
+
+%%% SKILLS %%%
+\section*{{\LARGE \color{myblue}Technical Skills}\xfilll[0pt]{0.5pt}}
+
+\vspace{-20pt}
+\setlength{\tabcolsep}{9pt}
+\begin{table}[h]
+
+\begin{tabular}{lllll}
+
+\textbf{Programming} & Python, SQL \\[0.5mm]
+\textbf{Development} & XGBoost, Scikit-learn, Pandas, Numpy, Matplotlib, Seaborn, Keras, Tensorflow, Pytorch \\[0.5mm] 
+\textbf{Tools} & Git, GitHub, PostgreSQL, Minio, MLflow, Neovim \\[0.5mm]
+\textbf{Other} & Docker, Kubernetes, Linux, Proxmox, Latex 
+
+\end{tabular}
+\end{table}
+% \fi 
+
+\vspace{-20pt}
+%%% PROJECTS %%%
+\section*{{ \LARGE \color{myblue} Projects Involvement}\xfilll[0pt]{0.5pt}}
+\vspace{-13pt}
+\vspace{3.5mm}
+
+{\LARGE \textcolor{black}{Software Development}}
+\vspace{-1.5pt}
+\par\noindent\hrulefill % Add a horizontal line
+\\[0.35cm]
+\textbf{Reducing the impact of underwater noise on the marine environment of the Port of Cartagena.} \hfill  
+\\[0.15cm] 
+\normalfont{Python, Docker, Docker-Compose, Minio, PostgreSQL} \hfill { \small March 2022 - Present}
+\\[0.15cm]
+\emph{Technical University of Cartagena \& EU Life Project} \hfill    
+%\\[-0.6cm]
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent The project consists on build a system based on microservices architecture that capture
+	the date from diverse sources and stores it in a database backend.
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent The system will be deployed in as a Docker-Compose and consist from a following modules:
+	\begin{itemize}
+		\item \textbf{Data retrieving}: module that retrieves data from two hydrophones and AIS system and store it in a database.
+		\item \textbf{Data processing}: module that intake the data and process it to extract the noise level and associate it with the AIS data.
+		\item \textbf{API REST}: module that provides an API to access the data.
+	\end{itemize}
+	\end{itemize} 	
+
+\vspace{0.5cm}
+\noindent{\LARGE \textcolor{black}{Machine Learning}}
+\vspace{-1.5pt}
+\par\noindent\hrulefill % Add a horizontal line
+\\[0.35cm]
+\noindent\textbf{Detection of carbon fiber wrapping failures using images from a profilometer.} 
+\\[0.15cm]
+\normalfont{Python, Keras, Tensorflow, RetinaNet} \hfill {\ \small Feb 2022 - May 2023}
+\\[0.15cm]
+\emph{Technical University of Cartagena \& MTorres} \hfill 
+%\\[-0.6cm]
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent 	The project involves building a model and its corresponding pipeline to detect carbon
+	fiber wrapping failures using images from a profilometer. The project have the following stages:
+	\begin{itemize}
+		\item Data analysis and preprocessing pipeline.
+		\item Selecting of the performance metrics.
+		\item Train RetinaNet model implemented in Python with Keras (Tensorflow backend) and hyperparameter tuning.
+		\item Model evaluation and final results. 
+	\end{itemize}
+	\end{itemize} 	
+
+\noindent\textbf{Automatic extraction of optic nerve features from both eyes through image processing and recognition.}
+\\[0.15cm]
+\normalfont{Python, Keras, Tensorflow} \hfill {\ \small Dec 2019 - Dec 2020}
+\\[0.15cm]
+\emph{Technical University of Cartagena \& Hospital General Universitario Reina Sofía} \hfill  
+%\\[-0.6cm]
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent In this project my task was to curate the dataset obtained from the Hospital General Universitario Reina Sofía and develope a DL-based APP
+	that take two ocular fundus images to diagnose the glaucoma.
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent The project is part of Automatic feature extraction of the optical nerve of both eyes by
+	image processing and statistical pattern recognition for its integration in a telemedicine CAD (Computer-Aided Diagnosis) application. 
+	\end{itemize} 	
+
+\vspace{0.5cm}
+\noindent{\LARGE \textcolor{black}{Personal Projects}}
+\vspace{-1.5pt}
+\par\noindent\hrulefill % Add a horizontal line
+\\[0.35cm]
+\noindent\textbf{Kubernetes cluster building on Proxmox and managed with Ansible.} 
+\\[0.15cm]
+\normalfont{Ansible, Kubernetes, Proxmox, Docker} \hfill 
+\\[0.15cm]
+\emph{Personal} \hfill 
+%\\[-0.6cm]
+	\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent In this project, my goal is to replicate a real-word scenario of deploying a Machine Learning model within a Kubernetes cluster.
+	For this purpose, I have built a Kubernetes cluster on Proxmox, managing the VMs with Ansible. I am also use the Kubernetes cluster to learn new technologies such as Kafka, Spark, DeltaLake, etc.
+	The cluster serve as a playground for me to learn new technologies and experiment with them.
+	\end{itemize} 	
+
+\vspace{-15pt}
+
+%%% PUBLICATIONS %%%
+\section*{{\LARGE \color{myblue}Publications}\xfilll[0pt]{0.5pt}}
+\vspace{-8pt}
+
+\noindent\textbf{\large{Decision trees for glaucoma screening based on the asymmetry of the retinal nerve fiber layer in optical coherence tomography}} \hfill {\ \small Jun 2022}
+\\[0.15cm]
+\emph{MDPI} \hfill{\small DOI: 10.3390/s22134842}
+%\\[-0.6cm]
+\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+    \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Authors:} Berenguer-Vidal, Rafael; Verd\'u-Monedor, Rafael; Morales-S\'anchez, Juan; Sell\'es-Navarro, Inmaculada;
+	Kovalyk Oleksandr; Sancho-G\'omez, Jos\'e-Luis.
+\end{itemize}
+
+\noindent\textbf{\large{Improving glaucoma diagnosis assembling deep networks and voting schemes}} \hfill {\ \small Jun 2022}
+\\[0.15cm]
+\emph{MDPI} \hfill{\small DOI: 10.3390/diagnostics12061382}
+%\\[-0.6cm]
+\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+    \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Authors:} S\'anchez-Morales, Adrian; Morales-S\'anchez, Juan; Kovalyk, Oleksandr; Verd\'u-Monedero, Rafael;
+	Sancho-G\'omez, Jos\'e-Luis.  
+\end{itemize}
+
+\noindent\textbf{\large{PAPILA: Dataset with fundus images and clinical data of both eyes of the same patient for glaucoma assessment}} \hfill {\ \small Jun 2022}
+\\[0.15cm]
+\emph{Nature} \hfill{\small DOI: 10.1038/s41597-022-01388-1}
+%\\[-0.6cm]
+\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+    \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Authors:} Kovalyk, Oleksandr; Morales-S\'anchez, Juan; Verd\'u-Monedero, Rafael; Sell\'es-Navarro, Inmaculada;
+	Palaz\'on-Cabanes, Ana; Sancho-G\'omez, Jos\'e-Luis.
+\end{itemize}
+
+%%% CONFERENCES %%%
+
+\section*{{\LARGE \color{myblue}Conferences}\xfilll[0pt]{0.5pt}}
+\vspace{-13pt}
+\vspace{3.5mm}
+
+\noindent{\LARGE \textcolor{black}{International Conferences}}
+\vspace{-1.5pt}
+\par\noindent\hrulefill % Add a horizontal line
+
+\noindent\textbf{\large{Analysis of the asymmetry in RNLF thinkness using sprectralis OCT measurements in healthy and glaucoma patients}} \hfill {\ \small May 2022}
+\\[0.15cm]
+\emph{Springer} \hfill{\small DOI: 10.1007/978-3-031-06242-1\_50}
+%\\[-0.6cm]
+\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Name of the conference:} 9th International Work-Conference on the Interplay Between Natural and Artificial Computation
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Location of the event:} Puerto de la Cruz, Tenerife, Spain
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \textbf{Date of the event:} May 31 - June 3, 2022
+    \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Authors:} Berenguer-Vidal, Rafael; Verd\'u-Monedero, Rafael; Morales-S\'anchez, Juan; Sell\'es-Navarro,
+	Inmaculada; Kovalyk Oleksandr.
+\end{itemize}
+
+\noindent{\LARGE \textcolor{black}{National Conferences}}
+\vspace{-1.5pt}
+\par\noindent\hrulefill % Add a horizontal line
+
+\noindent\textbf{\large{Automatic Instance Segmentation Applied to Retinography for Optic Disc and Cup Segmentation}} 
+\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Name of the conference:} XXXVIII Annual Congress of the Spanish Society of Biomedical Engineering
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Location of the event:} Valladolid, Castilla y Le\'on, Spain	
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Date of the event:} 25-27 November 2020
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Organizing entity:} University of Valladolid 
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Authors:} Kovalyk, Oleksandr; Morales-S\'anchez, Juan; Verd\'u-Monedero, Rafael; Sell\'es-Navarro, Inmaculada. 
+\end{itemize}
+
+\noindent\textbf{\large{Application of mobileNet for early diagnosis of glaucoma: a binocular approach}} 
+\begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Name of the conference:} XLI Annual Congress of the Spanish Society of Biomedical Engineering
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Location of the event:} Cartagena, Murcia, Spain	
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Date of the event:} 22-24 November 2023
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Organizing entity:} Technical University of Cartagena 
+	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent \textbf{Authors:} Kovalyk, Oleksandr; Morales-S\'anchez, Juan; Verd\'u-Monedero, Rafael; Sell\'es-Navarro, Inmaculada;
+	Sancho-G\'omez, Jos\'e-Luis. 
+\end{itemize}
+
+%%% COURSES %%%
+
+% \section*{{\LARGE \color{myblue}Key Courses Undertaken}\xfilll[0pt]{0.5pt}}
+% \vspace{-15pt}
+% \vspace{1.5mm}
+% 
+% \textbf{\large Mathematics and Statistics}
+% \\[-0.6cm]
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+% 	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Calculus, Probability and Random Processes, Basics of Statistics, Data Preprocessing for Regression Analysis,
+% Regression Models, Classification Models, Support Vector Machines, Ensemble Techniques, Artificial Neural Networks
+% 	\end{itemize}
+% \textbf{\large Computer Science}
+% \\[-0.6cm]
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+% 	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Structured Programming Approach, Data Structures and Algorithms, Operating Systems, Computer Networks
+% 	\end{itemize}
+% \vspace{-15pt}
+
+
+%%% POSITIONS OF RESPONSIBILITY %%%
+%  \section*{{\LARGE \color{myblue}Positions of Responsibility}\xfilll[0pt]{0.5pt}}
+% \vspace{-15pt}
+% \vspace{1.5mm}
+% 
+% \textbf{\large{Position}}} \hfill {\ \small Feb 2022 - Present}
+% \\[0.05cm]
+% \emph{Name of Organization}
+% \\[-0.6cm]
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+%     \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 1.
+% 	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 2.
+% 	\end{itemize}
+% \textbf{\large{Position}} \hfill {\ \small Feb 2022 - Present}
+% \\[0.05cm]
+% \emph{Name of Organization}
+% \\[-0.6cm]
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+%     \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 1.
+% 	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 2.
+% 	\end{itemize}
+%  \textbf{\large{Position}} \hfill {\ \small Feb 2022 - Present}
+% \\[0.05cm]
+% \emph{Name of Organization}
+% \\[-0.6cm]
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+%     \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 1.
+% 	\item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 2.
+% 	\end{itemize}
+% 
+
+%%% PUBLICATIONS %%%
+% \section*{{\LARGE \color{myblue}Publications}\xfilll[0pt]{0.5pt}}
+% \vspace{-8pt}
+% \textbf{\large{Title of Publication}} \hfill {\ \small Mar 2022}
+% \\[0.05cm]
+% \emph{Name of Publishing Organization} \hfill{\small ISBN: 123-456-789-0}
+% \\[-0.6cm]
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+%     \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 1.
+%     \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Your item 2.
+% \end{itemize}
+% 
+% 
+% %%% ACHIEVEMENTS %%%
+% \section*{{\LARGE \color{myblue}Achievements \& Certifications}\xfilll[0pt]{0.5pt}}
+% \vspace{-15pt}
+% \vspace{1.5mm}
+% 
+% \begin{itemize}[itemsep = -0.75 mm, leftmargin=*]
+% \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Achievement 1.
+% \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Achievement 2.
+% \item[{\color[RGB]{10,0,254}$\bullet$}] \noindent Achievement 3.
+% \end{itemize}
+
+\end{document}
