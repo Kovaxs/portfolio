@@ -1,0 +1,19 @@
+---
+interface Props {
+  command: string;
+  path?: string;
+  heading?: boolean;
+}
+
+const { command, path = '~', heading = false } = Astro.props;
+const Tag = heading ? 'h2' : 'span';
+---
+
+<div data-terminal-prompt class="flex flex-wrap items-center gap-x-2 gap-y-1">
+  <span class="command-prefix">visitor@terminal:</span>
+  <span class="dir-path">{path}</span>
+  <Tag class="font-normal text-inherit">
+    <span class="sr-only">$ {command}</span>
+    <span aria-hidden="true">$ <span data-command-text>{command}</span><span class="terminal-typing-cursor"></span></span>
+  </Tag>
+</div>
