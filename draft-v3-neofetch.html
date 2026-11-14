@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal CV - Gruvbox</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+
+        :root {
+            --gruv-bg: #282828;
+            --gruv-bg-soft: #32302f;
+            --gruv-fg: #ebdbb2;
+            --gruv-red: #fb4934;
+            --gruv-green: #b8bb26;
+            --gruv-yellow: #fabd2f;
+            --gruv-blue: #83a598;
+            --gruv-purple: #d3869b;
+            --gruv-aqua: #8ec07c;
+            --gruv-orange: #fe8019;
+            --gruv-gray: #928374;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: var(--gruv-bg);
+            color: var(--gruv-fg);
+            line-height: 1.5;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.15;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 100px;
+            z-index: 101;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.05;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            80% { bottom: 100%; }
+            100% { bottom: 0%; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background-color: var(--gruv-green);
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .selection-highlight::selection {
+            background: var(--gruv-green);
+            color: var(--gruv-bg);
+        }
+
+        .terminal-shadow {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        .command-prefix {
+            color: var(--gruv-green);
+            font-weight: bold;
+        }
+
+        .dir-path {
+            color: var(--gruv-blue);
+        }
+
+        #pixel-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        #toroid {
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .tmux-tab {
+            color: #a89984;
+            padding: 4px 10px;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .tmux-tab:hover {
+            color: #ebdbb2;
+            background: #3c3836;
+        }
+
+        .tmux-tab-active {
+            background: #fabd2f;
+            color: #282828 !important;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen p-4 md:p-12 lg:p-20 relative flex flex-col items-center main-container selection-highlight">
+        <canvas id="pixel-canvas"></canvas>
+
+        <!-- CRT Overlays -->
+        <div class="crt-overlay"></div>
+        <div class="scanline"></div>
+
+        <!-- Terminal Window -->
+        <div class="w-full max-w-5xl terminal-shadow rounded-lg overflow-hidden border border-[#3c3836] bg-[#282828]/95 backdrop-blur-sm flex flex-col">
+            <!-- tmux Status Bar (status-position top) -->
+            <div class="bg-[#1d2021] border-b border-[#3c3836] flex items-center justify-between text-[10px] md:text-xs select-none">
+                <div class="flex items-center min-w-0">
+                    <span class="bg-[#b8bb26] text-[#282828] font-bold px-2 py-1 shrink-0">[visitor]</span>
+                    <nav class="flex items-center overflow-x-auto">
+                        <a id="tab-neofetch" href="#section-neofetch" class="tmux-tab" data-label="0:neofetch">0:neofetch*</a>
+                        <a id="tab-about" href="#section-about" class="tmux-tab" data-label="1:about">1:about</a>
+                        <a id="tab-experience" href="#section-experience" class="tmux-tab" data-label="2:experience">2:experience</a>
+                        <a id="tab-projects" href="#section-projects" class="tmux-tab" data-label="3:projects">3:projects</a>
+                        <a id="tab-contact" href="#section-contact" class="tmux-tab" data-label="4:contact">4:contact</a>
+                    </nav>
+                </div>
+                <div class="hidden md:flex items-center shrink-0 text-[#a89984]">
+                    <span class="px-2">alex.dev</span>
+                    <span class="px-2" id="tmux-clock">--:--</span>
+                    <span class="pl-2 pr-3" id="tmux-date">--</span>
+                </div>
+            </div>
+
+            <!-- Terminal Content -->
+            <div class="p-6 md:p-10 space-y-8 overflow-y-auto text-sm md:text-base">
+                <!-- Header Section: neofetch -->
+                <header id="section-neofetch" class="space-y-4 scroll-mt-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="command-prefix">visitor@terminal:</span>
+                        <span class="dir-path">~</span>
+                        <span>$ neofetch</span>
+                    </div>
+                    <div class="pl-4 border-l-2 border-[#504945] py-2">
+                        <div class="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-10 lg:gap-14">
+                            <!-- Spinning ASCII toroid (where the OS logo would sit) -->
+                            <pre id="toroid" class="shrink-0 select-none text-[9px] md:text-[10px] lg:text-[11px] leading-[1.15]" aria-label="Spinning ASCII toroid logo"></pre>
+
+                            <!-- Neofetch info fields -->
+                            <div class="text-xs md:text-sm lg:text-base space-y-1.5 min-w-0 w-full md:w-auto">
+                                <h1 class="text-base md:text-lg font-normal m-0">
+                                    <span class="text-[#fabd2f] font-bold">alex</span><span class="text-[#928374]">@</span><span class="text-[#83a598] font-bold">terminal</span>
+                                </h1>
+                                <div class="text-[#504945]">────────────────</div>
+                                <div><span class="text-[#b8bb26] font-bold">Name</span>: <span class="text-[#ebdbb2]">Alex Rivera</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Role</span>: <span class="text-[#ebdbb2]">Senior Systems Architect &amp; Full Stack Engineer</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Focus</span>: <span class="text-[#ebdbb2]">Low-latency systems &amp; aesthetic UIs</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Uptime</span>: <span class="text-[#ebdbb2]">8+ years in production</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">OS</span>: <span class="text-[#ebdbb2]">HumanOS x86_64 (Arch, btw)</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Shell</span>: <span class="text-[#ebdbb2]">zsh + tmux</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Editor</span>: <span class="text-[#ebdbb2]">Neovim — gruvbox, obviously</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Languages</span>: <span class="text-[#ebdbb2]">Rust, TypeScript, Go</span></div>
+                                <div><span class="text-[#b8bb26] font-bold">Resume</span>: <a id="neofetch-cv-link" href="#alex_rivera_cv.pdf" class="text-[#8ec07c] underline decoration-dotted underline-offset-4 hover:text-[#ebdbb2] transition-colors">cv.pdf</a> <span class="text-[#928374]">(128K, updated weekly)</span></div>
+                                <!-- Gruvbox palette swatches -->
+                                <div class="pt-3 leading-none">
+                                    <div><span style="color:#1d2021">███</span><span style="color:#cc241d">███</span><span style="color:#98971a">███</span><span style="color:#d79921">███</span><span style="color:#458588">███</span><span style="color:#b16286">███</span><span style="color:#689d6a">███</span><span style="color:#a89984">███</span></div>
+                                    <div><span style="color:#928374">███</span><span style="color:#fb4934">███</span><span style="color:#b8bb26">███</span><span style="color:#fabd2f">███</span><span style="color:#83a598">███</span><span style="color:#d3869b">███</span><span style="color:#8ec07c">███</span><span style="color:#ebdbb2">███</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Navigation/Command Area -->
+                <section id="section-about" class="space-y-6 scroll-mt-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="command-prefix">visitor@terminal:</span>
+                        <span class="dir-path">~</span>
+                        <span>$ ls -la /about</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Profile Card -->
+                        <div class="border border-[#504945] p-5 hover:bg-[#32302f] transition-all group bg-[#282828]">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <iconify-icon icon="lucide:user" class="text-2xl text-[#b8bb26]"></iconify-icon>
+                                <h3 class="font-bold text-[#ebdbb2]">PROFILE</h3>
+                            </div>
+                            <p class="text-xs text-[#a89984] leading-relaxed">
+                                8+ years of experience building scalable infrastructure. Passionate about Rust, Go, and the VIM ecosystem. I turn complex problems into elegant, maintainable code.
+                            </p>
+                        </div>
+
+                        <!-- Tech Stack Card -->
+                        <div class="border border-[#504945] p-5 hover:bg-[#32302f] transition-all bg-[#282828]">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <iconify-icon icon="lucide:cpu" class="text-2xl text-[#fe8019]"></iconify-icon>
+                                <h3 class="font-bold text-[#ebdbb2]">CORE_STACK</h3>
+                            </div>
+                            <ul class="text-xs space-y-1 text-[#a89984]">
+                                <li><span class="text-[#fe8019]">&gt;</span> Languages: Rust, TypeScript, Go</li>
+                                <li><span class="text-[#fe8019]">&gt;</span> Frontend: React, Next.js, Tailwind</li>
+                                <li><span class="text-[#fe8019]">&gt;</span> Backend: Node.js, PostgreSQL, Redis</li>
+                                <li><span class="text-[#fe8019]">&gt;</span> Cloud: AWS, Docker, Kubernetes</li>
+                            </ul>
+                        </div>
+
+                        <!-- Hobbies Card -->
+                        <div class="border border-[#504945] p-5 hover:bg-[#32302f] transition-all bg-[#282828]">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <iconify-icon icon="lucide:code-2" class="text-2xl text-[#8ec07c]"></iconify-icon>
+                                <h3 class="font-bold text-[#ebdbb2]">INTERESTS</h3>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2 py-1 bg-[#3c3836] text-[10px] rounded text-[#8ec07c]">Open Source</span>
+                                <span class="px-2 py-1 bg-[#3c3836] text-[10px] rounded text-[#8ec07c]">NeoVim Configs</span>
+                                <span class="px-2 py-1 bg-[#3c3836] text-[10px] rounded text-[#8ec07c]">Self-Hosting</span>
+                                <span class="px-2 py-1 bg-[#3c3836] text-[10px] rounded text-[#8ec07c]">Home Labs</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Experience Section -->
+                <section id="section-experience" class="space-y-6 scroll-mt-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="command-prefix">visitor@terminal:</span>
+                        <span class="dir-path">~/work</span>
+                        <span>$ cat experience.md</span>
+                    </div>
+
+                    <div class="space-y-8 pl-4 border-l-2 border-[#504945]">
+                        <div class="relative">
+                            <div class="absolute -left-[22px] top-1.5 w-3 h-3 bg-[#fabd2f] rounded-full"></div>
+                            <div class="mb-1">
+                                <span class="text-[#fabd2f] font-bold">Lead Engineer</span>
+                                <span class="text-[#928374]">@ CyberSystems Inc.</span>
+                                <span class="float-right text-xs text-[#928374]">2021 — PRESENT</span>
+                            </div>
+                            <p class="text-sm text-[#a89984]">
+                                Architected and maintained a microservices ecosystem processing 50M+ requests daily. Reduced latency by 40% using Rust-based proxies and optimized database indexing.
+                            </p>
+                        </div>
+
+                        <div class="relative">
+                            <div class="absolute -left-[22px] top-1.5 w-3 h-3 bg-[#b8bb26] rounded-full"></div>
+                            <div class="mb-1">
+                                <span class="text-[#b8bb26] font-bold">Full Stack Developer</span>
+                                <span class="text-[#928374]">@ NexGen Solutions</span>
+                                <span class="float-right text-xs text-[#928374]">2018 — 2021</span>
+                            </div>
+                            <p class="text-sm text-[#a89984]">
+                                Built end-to-end features for a high-traffic e-commerce platform. Implemented real-time inventory tracking with Socket.io and Node.js.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Projects Section -->
+                <section id="section-projects" class="space-y-6 scroll-mt-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="command-prefix">visitor@terminal:</span>
+                        <span class="dir-path">~/projects</span>
+                        <span>$ ./view_portfolio.sh</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a id="project-1" href="#" class="block p-4 bg-[#32302f] border-l-4 border-[#83a598] hover:bg-[#3c3836] transition-colors">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-[#83a598] font-bold">Project: Quantum-CLI</h4>
+                                <iconify-icon icon="lucide:external-link" class="text-[#928374]"></iconify-icon>
+                            </div>
+                            <p class="text-xs text-[#a89984] mt-2">A blazing fast terminal manager written in Rust. 2.5k stars on GitHub.</p>
+                        </a>
+                        <a id="project-2" href="#" class="block p-4 bg-[#32302f] border-l-4 border-[#d3869b] hover:bg-[#3c3836] transition-colors">
+                            <div class="flex justify-between items-start">
+                                <h4 class="text-[#d3869b] font-bold">Project: Solar-Theme</h4>
+                                <iconify-icon icon="lucide:external-link" class="text-[#928374]"></iconify-icon>
+                            </div>
+                            <p class="text-xs text-[#a89984] mt-2">A high-contrast color scheme for VS Code and Neovim focusing on readability.</p>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- Contact Section -->
+                <footer id="section-contact" class="pt-8 space-y-6 scroll-mt-6">
+                    <div class="flex items-center space-x-2">
+                        <span class="command-prefix">visitor@terminal:</span>
+                        <span class="dir-path">~</span>
+                        <span>$ ssh alex@remote</span>
+                    </div>
+
+                    <div class="bg-[#32302f] p-6 rounded border border-[#504945] flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="space-y-2">
+                            <p class="text-xs uppercase tracking-widest text-[#928374]">Connection Details</p>
+                            <div class="flex items-center space-x-3">
+                                <iconify-icon icon="lucide:mail" class="text-[#8ec07c]"></iconify-icon>
+                                <span class="text-[#ebdbb2]">alex.dev@protonmail.com</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <iconify-icon icon="lucide:github" class="text-[#8ec07c]"></iconify-icon>
+                                <span class="text-[#ebdbb2]">github.com/alexrivera</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <iconify-icon icon="lucide:file-text" class="text-[#8ec07c]"></iconify-icon>
+                                <span class="text-[#ebdbb2]">cv.pdf — 128 KB</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-3 shrink-0">
+                            <a id="cta-download-cv" href="#alex_rivera_cv.pdf" class="px-8 py-3 border-2 border-[#83a598] text-[#83a598] font-bold hover:bg-[#83a598] hover:text-[#282828] transition-colors inline-flex items-center justify-center gap-2">
+                                <iconify-icon icon="lucide:download"></iconify-icon>
+                                <span>CV.PDF</span>
+                            </a>
+                            <a id="cta-hire-me" href="mailto:alex.dev@protonmail.com" class="px-8 py-3 bg-[#b8bb26] text-[#282828] font-bold hover:bg-[#ebdbb2] transition-colors text-center">
+                                INITIALIZE_HIRE()
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Blinking Prompt -->
+                    <div class="flex items-center space-x-2 mt-12">
+                        <span class="command-prefix">visitor@terminal:</span>
+                        <span class="dir-path">~</span>
+                        <span class="flex items-center">
+                            $<span class="cursor ml-2"></span>
+                        </span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Decorative Sidebar Info (Desktop Only) -->
+        <div class="fixed right-8 top-1/2 -translate-y-1/2 hidden 2xl:block space-y-4">
+            <div class="text-[10px] text-[#504945] uppercase tracking-[0.3em] vertical-text [writing-mode:vertical-rl]">
+                System Status: Online
+            </div>
+            <div class="h-32 w-[1px] bg-[#504945] mx-auto"></div>
+            <div class="text-[10px] text-[#504945] uppercase tracking-[0.3em] vertical-text [writing-mode:vertical-rl]">
+                Version 2.4.0-stable
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('pixel-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let mouse = { x: undefined, y: undefined };
+
+        const gruvColors = ['#fb4934', '#b8bb26', '#fabd2f', '#83a598', '#d3869b', '#8ec07c', '#fe8019'];
+        const particles = [];
+        const gridSize = 30;
+        let grid = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            initGrid();
+        }
+
+        function initGrid() {
+            grid = [];
+            for (let x = 0; x < width; x += gridSize) {
+                for (let y = 0; y < height; y += gridSize) {
+                    grid.push({
+                        x: x,
+                        y: y,
+                        color: '#3c3836',
+                        opacity: 0.1,
+                        targetOpacity: 0.1
+                    });
+                }
+            }
+        }
+
+        class Pixel {
+            constructor(depth) {
+                this.depth = depth;
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.size = Math.random() * 4 + 2;
+                this.color = gruvColors[Math.floor(Math.random() * gruvColors.length)];
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (mouse.x && mouse.y) {
+                    const dx = this.x - mouse.x;
+                    const dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 300) {
+                        const force = (300 - dist) / 300;
+                        this.x += dx * force * 0.05 * this.depth;
+                        this.y += dy * force * 0.05 * this.depth;
+                    }
+                }
+
+                if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = 0.4 * this.depth;
+                ctx.fillRect(this.x, this.y, this.size, this.size);
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < 150; i++) {
+                particles.push(new Pixel(Math.random() * 0.8 + 0.2));
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        window.addEventListener('resize', resize);
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Grid
+            grid.forEach(p => {
+                let dist = 1000;
+                if (mouse.x && mouse.y) {
+                    const dx = p.x - mouse.x;
+                    const dy = p.y - mouse.y;
+                    dist = Math.sqrt(dx * dx + dy * dy);
+                }
+
+                if (dist < 150) {
+                    p.targetOpacity = 0.4;
+                } else {
+                    p.targetOpacity = 0.05;
+                }
+                p.opacity += (p.targetOpacity - p.opacity) * 0.1;
+
+                ctx.fillStyle = '#ebdbb2';
+                ctx.globalAlpha = p.opacity;
+                ctx.fillRect(p.x, p.y, 2, 2);
+            });
+
+            // Draw Particles
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- Spinning ASCII Toroid (classic donut.c math, Gruvbox luminance ramp) ---
+        const toroidEl = document.getElementById('toroid');
+        const T_COLS = 38, T_ROWS = 19;
+        const LUM_CHARS = '.,-~:;=!*#$@';
+        const LUM_COLORS = ['#665c54', '#7c6f64', '#928374', '#a89984', '#bdae93', '#d5c4a1', '#83a598', '#8ec07c', '#b8bb26', '#fabd2f', '#fe8019', '#fb4934'];
+        let tA = 0.5, tB = 0.2;
+
+        function renderToroid() {
+            const out = new Array(T_COLS * T_ROWS).fill(' ');
+            const lum = new Int8Array(T_COLS * T_ROWS).fill(-1);
+            const zb = new Float32Array(T_COLS * T_ROWS);
+            const cosA = Math.cos(tA), sinA = Math.sin(tA);
+            const cosB = Math.cos(tB), sinB = Math.sin(tB);
+
+            for (let j = 0; j < 6.28; j += 0.07) {
+                const cosJ = Math.cos(j), sinJ = Math.sin(j);
+                for (let i = 0; i < 6.28; i += 0.02) {
+                    const cosI = Math.cos(i), sinI = Math.sin(i);
+                    const h = cosJ + 2;
+                    const D = 1 / (sinI * h * sinA + sinJ * cosA + 5);
+                    const t = sinI * h * cosA - sinJ * sinA;
+                    const x = Math.floor(T_COLS / 2 + T_COLS * 0.38 * D * (cosI * h * cosB - t * sinB));
+                    const y = Math.floor(T_ROWS / 2 + T_ROWS * 0.40 * D * (cosI * h * sinB + t * cosB));
+                    const o = x + T_COLS * y;
+                    const N = Math.floor(8 * ((sinJ * sinA - sinI * cosJ * cosA) * cosB - sinI * cosJ * sinA - sinJ * cosA - cosI * cosJ * sinB));
+                    if (y >= 0 && y < T_ROWS && x >= 0 && x < T_COLS && D > zb[o]) {
+                        zb[o] = D;
+                        const idx = N < 0 ? 0 : (N > 11 ? 11 : N);
+                        out[o] = LUM_CHARS[idx];
+                        lum[o] = idx;
+                    }
+                }
+            }
+
+            let html = '';
+            for (let k = 0; k < out.length; k++) {
+                if (k !== 0 && k % T_COLS === 0) html += '\n';
+                const l = lum[k];
+                if (l < 0) { html += ' '; continue; }
+                let run = out[k];
+                let j2 = k + 1;
+                while (j2 < out.length && j2 % T_COLS !== 0 && lum[j2] === l) { run += out[j2]; j2++; }
+                html += '<span style="color:' + LUM_COLORS[l] + '">' + run + '</span>';
+                k = j2 - 1;
+            }
+            toroidEl.innerHTML = html;
+
+            tA += 0.045;
+            tB += 0.022;
+        }
+
+        renderToroid();
+        setInterval(renderToroid, 50);
+
+        // --- tmux status bar: live clock + scrollspy tabs ---
+        const tmuxClock = document.getElementById('tmux-clock');
+        const tmuxDate = document.getElementById('tmux-date');
+        const TMUX_MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        function tickTmuxClock() {
+            const now = new Date();
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            tmuxClock.textContent = hh + ':' + mm;
+            tmuxDate.textContent = String(now.getDate()).padStart(2, '0') + '-' + TMUX_MONTHS[now.getMonth()] + '-' + String(now.getFullYear()).slice(2);
+        }
+        tickTmuxClock();
+        setInterval(tickTmuxClock, 1000);
+
+        const tmuxTabs = [
+            { tab: document.getElementById('tab-neofetch'), section: document.getElementById('section-neofetch') },
+            { tab: document.getElementById('tab-about'), section: document.getElementById('section-about') },
+            { tab: document.getElementById('tab-experience'), section: document.getElementById('section-experience') },
+            { tab: document.getElementById('tab-projects'), section: document.getElementById('section-projects') },
+            { tab: document.getElementById('tab-contact'), section: document.getElementById('section-contact') }
+        ];
+
+        function setActiveTmuxTab(active) {
+            tmuxTabs.forEach(t => {
+                const isActive = t === active;
+                t.tab.classList.toggle('tmux-tab-active', isActive);
+                t.tab.textContent = t.tab.dataset.label + (isActive ? '*' : '');
+            });
+        }
+
+        const tmuxTabObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const match = tmuxTabs.find(t => t.section === entry.target);
+                    if (match) setActiveTmuxTab(match);
+                }
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+
+        tmuxTabs.forEach(t => tmuxTabObserver.observe(t.section));
+        setActiveTmuxTab(tmuxTabs[0]);
+
+        resize();
+        initParticles();
+        animate();
+    </script>
+</body>
+</html>
