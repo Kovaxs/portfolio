@@ -35,7 +35,8 @@ Deploy that directory to a static host. No server adapter, React, or backend is 
 - `src/pages/index.astro` — portfolio markup.
 - `src/data/cv.ts` — profile, skills, education, experience, projects, publications, and conferences transcribed from `cv.tex`.
 - `public/oleksandr_kovalyk_cv.pdf` — downloadable résumé compiled from `cv.tex`.
-- `src/layouts/BaseLayout.astro` — document shell, metadata, and font loading.
+- `public/fonts/` — self-hosted JetBrains Mono variable font and its SIL Open Font License.
+- `src/layouts/BaseLayout.astro` — document shell, metadata, and font preloading.
 - `src/styles/global.css` — Tailwind v4, Gruvbox palette, and terminal effects.
 - `src/scripts/terminal.js` — particles, ASCII toroid, and local clock.
 - `src/scripts/terminal-reveal.js` — initial command typing and scroll-triggered section reveals.
@@ -43,7 +44,7 @@ Deploy that directory to a static host. No server adapter, React, or backend is 
 - `src/components/Icon.astro` — build-time SVG icons, replacing the Iconify CDN.
 - `public/` — files copied directly into the build, such as a résumé PDF.
 
-Tailwind runs at build time through its Vite plugin. Browser JavaScript is bundled by Astro, with no UI framework hydration. Google Fonts is still an external request; self-host JetBrains Mono if offline loading is required.
+Tailwind runs at build time through its Vite plugin. Browser JavaScript is bundled by Astro, with no UI framework hydration. JetBrains Mono is self-hosted as a single Latin variable-font subset, preloaded for the initial view, with metric-adjusted local monospace fallbacks. The site makes no runtime CDN requests.
 
 ## Before publishing
 
@@ -74,8 +75,8 @@ For takeover protection, [verify domain ownership in your GitHub account's Pages
 
 ## Accessibility and progressive enhancement
 
-Without JavaScript, all content remains visible and the toroid has static fallback artwork. With JavaScript, `neofetch` types on load, then further downward scrolling types the next command and reveals its output. The terminal grows without intercepting scrolling; the continue button also works with touch and keyboard. “Show all” bypasses the sequence. Deep links, browser find, printing, and restored history navigation expose the full content.
+Without JavaScript, all content remains visible, the toroid has static fallback artwork, and decorative animation stays off. With JavaScript, `neofetch` types on load, then further downward scrolling types the next command and reveals its output. The terminal grows without intercepting scrolling; the continue button also works with touch and keyboard. “Show all” bypasses the sequence. Deep links, browser find, printing, and restored history navigation expose the full content.
 
-The live clock uses the visitor's local time. Reduced-motion users see all content immediately, without typing or reveal animations; particles, toroid rotation, scanlines, blinking, and smooth scrolling also stop. Background visual animations pause in inactive tabs. Links and buttons have visible focus outlines.
+The live clock uses the visitor's local time. A “Pause motion” button stops and resumes the decorative canvas, toroid, scanline, and cursor animations. Reduced-motion users see all content immediately, without typing or reveal animations; particles, toroid rotation, scanlines, blinking, and smooth scrolling also stop, and the motion control stays hidden. Background visual animations pause in inactive tabs, and toroid updates pause while it is off-screen. Links and buttons have visible focus outlines.
 
 SVG icon paths are derived from Lucide/Feather; see `LICENSE-ICONS.txt`.
