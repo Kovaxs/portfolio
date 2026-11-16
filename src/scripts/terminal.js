@@ -1,5 +1,8 @@
 // Progressive enhancements only: the portfolio content is static HTML.
+const root = document.documentElement;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const motionToggle = document.getElementById('motion-toggle');
+let motionPaused = false;
 const canvas = document.getElementById('pixel-canvas');
 const ctx = canvas?.getContext('2d');
 const toroidEl = document.getElementById('toroid');
@@ -156,7 +159,16 @@ function renderToroid() {
   tB += 0.022;
 }
 
-// One animation loop, paused in background tabs and for reduced-motion users.
+// Keep exact viewport visibility separate from the fixed canvas animation.
+let toroidVisible = true;
+if (toroidEl) {
+  const toroidObserver = new IntersectionObserver(([entry]) => {
+    toroidVisible = entry.isIntersecting;
+  }, { rootMargin: '100px 0px' });
+  toroidObserver.observe(toroidEl);
+}
+
+// One animation loop, paused on request, in background tabs, and for reduced motion.
 let animationFrame = null;
 let lastToroidFrame = 0;
 let lastParticleFrame = 0;
@@ -166,7 +178,7 @@ function animate(timestamp) {
     drawParticles();
     lastParticleFrame = timestamp;
   }
-  if (timestamp - lastToroidFrame >= 50) {
+  if (toroidVisible && timestamp - lastToroidFrame >= 50) {
     renderToroid();
     lastToroidFrame = timestamp;
   }
@@ -178,10 +190,25 @@ function syncAnimation() {
     cancelAnimationFrame(animationFrame);
     animationFrame = null;
   }
-  if (!reducedMotion.matches && !document.hidden) {
+  if (!reducedMotion.matches && !motionPaused && !document.hidden) {
     animationFrame = requestAnimationFrame(animate);
   }
 }
+
+function syncMotionControl() {
+  const motionAvailable = !reducedMotion.matches;
+  root.classList.toggle('terminal-motion-ready', motionAvailable);
+  if (!motionToggle) return;
+  motionToggle.hidden = !motionAvailable;
+  motionToggle.textContent = motionPaused ? 'Resume motion' : 'Pause motion';
+}
+
+motionToggle?.addEventListener('click', () => {
+  motionPaused = !motionPaused;
+  root.classList.toggle('terminal-motion-paused', motionPaused);
+  syncMotionControl();
+  syncAnimation();
+});
 
 resize();
 if (ctx) {
@@ -190,8 +217,12 @@ if (ctx) {
   }
 }
 renderToroid();
+syncMotionControl();
 syncAnimation();
-reducedMotion.addEventListener('change', syncAnimation);
+reducedMotion.addEventListener('change', () => {
+  syncMotionControl();
+  syncAnimation();
+});
 
 // tmux status bar: browser-local clock.
 const tmuxClock = document.getElementById('tmux-clock');
